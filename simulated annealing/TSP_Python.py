@@ -5,8 +5,8 @@ import numpy as np
 Point = namedtuple("Point", ['x', 'y'])
 
 
-input_data = "C:\\Users\\KON6750\\Dropbox\\LEARN\\optimization\\Coursera\\discrete optimization\\4tsp_local_search\\data\\tsp_51_1"
-input_data = "./data/tsp_51_1"
+input_data = "tsp_51_1"
+# input_data = "./data/tsp_51_1"
 f = open(input_data)
 input_data = f.read()
 lines = input_data.split('\n')
