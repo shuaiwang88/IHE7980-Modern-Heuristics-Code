@@ -6,6 +6,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # https://github.com/google/or-tools/blob/master/ortools/constraint_solver/routing_flags.cc
+# https://stackoverflow.com/questions/39328358/or-tools-consistently-returns-very-sub-optimal-tsp-solution
 
 from __future__ import print_function
 from six.moves import xrange
