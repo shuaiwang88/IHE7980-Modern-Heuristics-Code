@@ -4,7 +4,9 @@
 # Copyright 2018 Google LLC
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
+
+
+
 # https://github.com/google/or-tools/blob/master/ortools/constraint_solver/routing_flags.cc
 # https://stackoverflow.com/questions/39328358/or-tools-consistently-returns-very-sub-optimal-tsp-solution
 
@@ -37,35 +39,33 @@ from ortools.constraint_solver import routing_enums_pb2
 #   data["num_locations"] = len(data["locations"])
 #   data["num_vehicles"] = 1
 #   data["depot"] = 0
-#   return datadef create_data_model():
+#   return data
 
 
-
-  """Stores the data for the problem"""
-  data = {}
-  # Locations in block unit
-  _locations = \
+def create_data_model():
+# """Stores the data for the problem"""
+    data = {}
+# Locations in block unit
+    _locations = \
          [(35, 35 ),
-        (41,  49),  (35,  17), 
-        (55,  45),  (55,  20), 
-        (15,  30),  (25,  30), 
-        (20,  50),  (10,  43), 
-        (55,  60),  (30,  60), 
-        (20,  65),  (50,  35), 
-        (30,  25),  (15,  10), 
-        (30,   5),  (10,  20), 
-        (5  ,30 ), (20,  40), 
-        (15,  60),  (45,  65), 
-        (45,  20),  (45,  10), 
-        (55,   5),  (65,  35), 
+        (41,  49),  (35,  17),
+        (55,  45),  (55,  20),
+        (15,  30),  (25,  30),  
+        (20,  50),  (10,  43),
+        (55,  60),  (30,  60),
+        (20,  65),  (50,  35),
+        (30,  25),  (15,  10),
+        (30,   5),  (10,  20),
+        (5  ,30 ), (20,  40),
+        (15,  60),  (45,  65),
+        (45,  20),  (45,  10),
+        (55,   5),  (65,  35),
         (65,  20)]
-
-  data["locations"] = [(l[0] , l[1] ) for l in _locations]
-
-  data["num_locations"] = len(data["locations"])
-  data["num_vehicles"] = 1
-  data["depot"] = 0
-  return data
+    data["locations"] = [(l[0] , l[1] ) for l in _locations]
+    data["num_locations"] = len(data["locations"])
+    data["num_vehicles"] = 1
+    data["depot"] = 0
+    return data
 
 def manhattan_distance(position_1, position_2):
   """Computes the Manhattan distance between two points"""

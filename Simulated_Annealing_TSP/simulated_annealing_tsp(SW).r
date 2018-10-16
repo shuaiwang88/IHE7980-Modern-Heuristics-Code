@@ -1,4 +1,4 @@
-data <- read.table("26city.txt", quote="\"")
+data <- read.table("26city.txt", quote="\"",skip=1)
 colnames(data) <- c("X", "Y")
 data$index <- seq(1:nrow(data))
 

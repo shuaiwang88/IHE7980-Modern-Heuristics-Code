@@ -1,17 +1,24 @@
-import math
+##############################################################################
+# Use Simulated Annealing to solve TSP
+# Author: Shuai Wang 
+# Usage: Open Source 
+#
+#
+################################################################################
+#
+# import math
 from collections import namedtuple
 import numpy as np
 
+
+# initialize the data ---------------------------------------------------------
 Point = namedtuple("Point", ['x', 'y'])
-
-
 input_data = "26city.txt"
-# input_data = "./data/tsp_51_1"
+
 f = open(input_data)
 input_data = f.read()
 lines = input_data.split('\n')
 
-# nodeCount = int(lines[0])
 nodeCount = int(lines[0])
 
 points = []
@@ -21,52 +28,41 @@ for i in range(1, nodeCount + 1):
     parts = line.split()
     points.append(Point(float(parts[0]), float(parts[1])))
 
-
-# euclidean distance ###########################################################
+# generate distance matrix ---------------------------------------------------
+# euclidean distance 
 def length(point1, point2):
     return np.sqrt((point1.x - point2.x)**2 + (point1.y - point2.y)**2)
 
-#
-def obj_eval(solution):
-    obj = length(points[solution[-1]], points[solution[0]])
-    for index in range(0, nodeCount - 1):
-        obj += length(points[solution[index]], points[solution[index + 1]])
-    return obj
+# def obj_eval(solution):
+#     obj = length(points[solution[-1]], points[solution[0]])
+#     for index in range(0, nodeCount - 1):
+#         obj += length(points[solution[index]], points[solution[index + 1]])
+#     return obj
 
-# euclidean distance --------------------------------------------------------
-def cal_distance_matrix(data):
-    data_matrix = np.zeros((nodeCount,nodeCount),dtype=np.float)
-    for i in range(nodeCount):
-        for j in range(nodeCount):
-            data_matrix[i][j] = np.sqrt((points[i][0]-points[j][0]) **2 +
-                                        (points[i][1]-points[j][1]) ** 2 )
-    return data_matrix
-
-      dist_matrix[i,j] <- min(
-        (abs(data$Y[i] - up_endcap) + abs(data$X[i] - data$X[j]) +
-           abs(data$Y[j] - up_endcap)),
-
-
-        (abs(data$Y[i] - low_endcap) + abs(data$X[i] - data$X[j]) +
-           abs(data$Y[j] - low_endcap))
-# up_  = 6  # fake
-# low_ = 11 # fake
-
+# euclidean distance 
 # def cal_distance_matrix(data):
 #     data_matrix = np.zeros((nodeCount,nodeCount),dtype=np.float)
 #     for i in range(nodeCount):
 #         for j in range(nodeCount):
-#             data_matrix[i][j] = np.min([np.abs(points[i][0]- up_) +\
-#                                     np.abs(points[i][0]- points[j][0]) +\
-#                                     np.abs(points[j][0] - up_)),
-#                                     (np.abs(points[i][0] - low_) + np.abs(points[i][0] - points[j][0]) +
-#                                      np.abs(points[j][0] - low_))
-#                                     )
+#             data_matrix[i][j] = np.sqrt((points[i][0]-points[j][0]) **2 +
+#                                         (points[i][1]-points[j][1]) ** 2 )
+#     return data_matrix
 
+up_  = 60  # fake
+low_ = 1 # fake
+
+# manhantan like distance
+def cal_distance_matrix(data):
+    data_matrix = np.zeros((nodeCount,nodeCount),dtype=np.float)
+    for i in range(nodeCount):
+        for j in range(nodeCount):
+            data_matrix[i][j] = min(np.array( np.abs(points[i][0]- up_) + np.abs(points[i][0]- points[j][0]) + np.abs(points[j][0] - up_)) ,
+                   np.array(np.abs(points[i][0] - low_) + np.abs(points[i][0] - points[j][0]) + np.abs(points[j][0] - low_)))
+    return data_matrix
 
 data_matrix=cal_distance_matrix(points)
 
-
+# evaluate the objective ----------------------------------------------------
 def object_eval(data_matrix, solution):
   tour_distance =0;
   for i in range(nodeCount-1):
@@ -75,8 +71,8 @@ def object_eval(data_matrix, solution):
   return(np.around(tour_distance,decimals=2))
 
 
-object_eval(data_matrix, np.array(range(nodeCount)))
 
+# define position's  previous and after location-------------------------------
 def circular_before(pos, nTotal):
     if pos == 0:
         # prev = nTotal
@@ -95,6 +91,9 @@ def circular_after(pos, nTotal):
     return after
 
 
+
+
+# main ------------------------------------------------------------------------
 def TSP_SA(temperature,t_min,coolingRate):
 
     cursolution = np.random.permutation(nodeCount)
@@ -119,8 +118,8 @@ def TSP_SA(temperature,t_min,coolingRate):
                                                              newsolution[rand_pos1]
 
             rp1_p = circular_before(rand_pos1, nodeCount)  #-1
-            rp2_p = circular_before(rand_pos2, nodeCount)
-            
+            rp2_p = circular_before(rand_pos2, nodeCount) 
+
             rp1_n = circular_after(rand_pos1, nodeCount)
             rp2_n = circular_after(rand_pos2, nodeCount)
             
@@ -143,9 +142,9 @@ def TSP_SA(temperature,t_min,coolingRate):
                     f1 = f2
         temperature = coolingRate * temperature
         # print("tempeture",temperature)
-        # print(best_solution_obj)
-        # print(best_solution)
-    return(best_solution)
+        print(best_solution_obj)
+        print(best_solution)
+    return best_solution
 
 from datetime import datetime
 start_time = datetime.now()
@@ -155,7 +154,18 @@ time_elapsed
 print(test)
 print(object_eval(data_matrix,test))
 
-r_best = np.array((38,22,44,51,40,50,18,33,49,23,32,2,26,21,37,7,27,48,34,1,6,3,29,11,10,46,4,28,13,31,24,35,25,42,47\
-,9,5,36,14,8,20,41,19,17,45,15,16,39,30,43,12) ) -1
 
-object_eval(data_matrix, r_best)
+
+
+if __name__ == '__main__':
+    main()
+
+
+
+
+
+
+# r_best = np.array((38,22,44,51,40,50,18,33,49,23,32,2,26,21,37,7,27,48,34,1,6,3,29,11,10,46,4,28,13,31,24,35,25,42,47\
+# ,9,5,36,14,8,20,41,19,17,45,15,16,39,30,43,12) ) -1
+
+# object_eval(data_matrix, r_best)
