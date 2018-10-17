@@ -72,6 +72,15 @@ def manhattan_distance(position_1, position_2):
   return (
       abs(position_1[0] - position_2[0]) + abs(position_1[1] - position_2[1]))
 
+ 
+#  def manhattan_distance2(position_1, position_2):
+#   return (
+#       min(
+#       abs(position_1[1] - up_endcap) + abs(position_1[0] - position_2[0]) + abs(position_2[1] - up_endcap),
+#           abs(position_1[1] - low_endcap) + abs(position_1[0] - position_2[0]) + abs(position_2[1] - low_endcap)
+#       )
+#   )
+
 def create_distance_evaluator(data):
   """Creates callback to return distance between points."""
   _distances = {}
