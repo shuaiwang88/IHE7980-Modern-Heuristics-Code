@@ -6,3 +6,4 @@ It includes:
 1. Genetic Algrothim(GA) for knapsack problem, set covering problem.
 2. Simulated Annealing(SA) for travelling salesmen problem
 3. Golden search 
+4. Tabu Search for traveling salesmen problem.
