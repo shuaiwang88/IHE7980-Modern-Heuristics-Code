@@ -133,6 +133,27 @@ while (iter <- max_iter){
   tmp <- newsolution[rand_pos1]
   newsolution[rand_pos1] <- newsolution[rand_pos2]
   newsolution[rand_pos2] <- tmp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   
   
 }

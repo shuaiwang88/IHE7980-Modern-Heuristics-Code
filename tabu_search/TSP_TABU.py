@@ -7,7 +7,9 @@
 # Lesson: Local Search-Tabu Search
 
 # Citation: 
-# PEREIRA, V. (2018). Project: Metaheuristic-Local_Search-Tabu_Search, File: Python-MH-Local Search-Tabu Search.py, GitHub repository: <https://github.com/Valdecy/Metaheuristic-Local_Search-Tabu_Search>
+# PEREIRA, V. (2018). Project: Metaheuristic-Local_Search-Tabu_Search, File:
+# Python-MH-Local Search-Tabu Search.py, GitHub repository:
+# <https://github.com/Valdecy/Metaheuristic-Local_Search-Tabu_Search>
 
 ############################################################################
 
@@ -54,10 +56,11 @@ def buid_distance_matrix(coordinates):
                 y = coordinates.iloc[j,:]
                 Xdata.iloc[i,j] = euclidean_distance(x, y)
     return Xdata
-# 52 city
-Y = pd.read_csv('Python-MH-Local Search-Tabu Search-Dataset-02.txt', sep = '\t') # Berlin 52 = 7544.37
+# 53 city
+Y = pd.read_csv('Python-MH-Local Search-Tabu Search-Dataset-02.txt', sep = '\t') # Berlin 53 = 7544.37
 X = buid_distance_matrix(Y)
 seeds= seed_function(X)
+seeds
 # Function: Tour Plot
 def plot_tour_distance_matrix (Xdata, city_tour):
     m = Xdata.copy(deep = True)
@@ -81,7 +84,8 @@ def plot_tour_distance_matrix (Xdata, city_tour):
     plt.plot(xy.iloc[0,0], xy.iloc[0,1], marker = 's', alpha = 1, markersize = 7, color = 'red')
     plt.plot(xy.iloc[1,0], xy.iloc[1,1], marker = 's', alpha = 1, markersize = 7, color = 'orange')
     return
-plot_tour_coordinates(X, seed)
+
+plot_tour_coordinates(X, seeds)
 # Function: Tour Plot
 def plot_tour_coordinates (coordinates, city_tour):
     coordinates = coordinates.values
@@ -98,70 +102,82 @@ def plot_tour_coordinates (coordinates, city_tour):
     plt.plot(xy.iloc[1,0], xy.iloc[1,1], marker = 's', alpha = 1, markersize = 7, color = 'orange')
     return
 
+
+
+Xdata = X
+X
 # Function:  Build Recency Based Memory and Frequency Based Memory (STM and LTM)
 def build_stm_and_ltm(Xdata):
-n = int((Xdata.shape[0]**2 - Xdata.shape[0])/2)
-stm_and_ltm = pd.DataFrame(np.zeros((n, 5)),
-                           columns = ['City 1','City 2','Recency', 'Frequency', 'Distance'])
-count = 0
-for i in range (0, int((Xdata.shape[0]**2))):
-    city_1 = i // (Xdata.shape[1])
-    city_2 = i %  (Xdata.shape[1])
-    if (city_1 < city_2):
-        stm_and_ltm.iloc[count, 0] = city_1 + 1
-        stm_and_ltm.iloc[count, 1] = city_2 + 1
-        count = count + 1
+    n = int((Xdata.shape[0]**2 - Xdata.shape[0])/2)
+    stm_and_ltm = pd.DataFrame(np.zeros((n, 5)),
+                               columns = ['City 1','City 2','Recency', 'Frequency', 'Distance'])
+    count = 0
+    for i in range (0, int((Xdata.shape[0]**2))):
+        city_1 = i // (Xdata.shape[1])
+        city_2 = i %  (Xdata.shape[1])
+        if (city_1 < city_2):
+            stm_and_ltm.iloc[count, 0] = city_1 + 1
+            stm_and_ltm.iloc[count, 1] = city_2 + 1
+            count = count + 1
     return stm_and_ltm
-build_stm_and_ltm(X)
+s_and_l =build_stm_and_ltm(Xdata)
 Xdata = X
 Xdata.shape
-n
+
 
 # Function: Swap
 def local_search_2_swap(Xdata, city_tour, m, n):
     best_route = copy.deepcopy(city_tour)       
     best_route[0][m], best_route[0][n] = best_route[0][n], best_route[0][m]        
-    best_route[0][-1]  = best_route[0][0]              
+    best_route[0][-1] = best_route[0][0]
     best_route[1] = distance_calc(Xdata, best_route)                     
     city_list = copy.deepcopy(best_route)         
     return city_list
+np.transpose(seeds)
+np.transpose(local_search_2_swap(Xdata, seeds, 2, 10))
 
-local_search_2_swap(Xdata, seed, 2, 10)
+
 # Function: 2_opt
-def local_search_2_opt(Xdata, city_tour):
-    city_list = copy.deepcopy(city_tour)
-    best_route = copy.deepcopy(city_list)
-    seed = copy.deepcopy(city_list)
-    for i in range(0, len(city_list[0]) - 2):
-        for j in range(i+1, len(city_list[0]) - 1):
-            best_route[0][i:j+1] = list(reversed(best_route[0][i:j+1]))
-            best_route[0][-1]  = best_route[0][0]
-            best_route[1] = distance_calc(Xdata, best_route)
-            if (best_route[1] < city_list[1]):
-                city_list[1] = copy.deepcopy(best_route[1])
-                for n in range(0, len(city_list[0])):
-                    city_list[0][n] = best_route[0][n]
-            best_route = copy.deepcopy(seed)
+# def local_search_2_opt(Xdata, city_tour):
+city_list = copy.deepcopy(city_tour)
+best_route = copy.deepcopy(city_list)
+seed = copy.deepcopy(city_list)
+for i in range(0, len(city_list[0]) - 2):
+    for j in range(i+1, len(city_list[0]) - 1):
+        best_route[0][i:j+1] = list(reversed(best_route[0][i:j+1]))
+        # return to the depot
+        best_route[0][-1]  = best_route[0][0]
+        best_route[1] = distance_calc(Xdata, best_route)
+        if (best_route[1] < city_list[1]):
+            city_list[1] = copy.deepcopy(best_route[1])
+            for n in range(0, len(city_list[0])):
+                city_list[0][n] = best_route[0][n]
+        best_route = copy.deepcopy(seed)
     return city_list
 
-city_tour = seeds
-np.transpose(local_search_2_opt(Xdata, seed))
 np.transpose(city_list)
 np.transpose(best_route)
+city_tour = seeds
+np.transpose(seeds)
+np.transpose(local_search_2_opt(Xdata, seeds))
 
 
+stm_and_ltm = s_and_l
 
+stm_and_ltm
 # Function: Diversification
 def ltm_diversification (Xdata, stm_and_ltm, city_list):
-    stm_and_ltm = stm_and_ltm.sort_values(['Frequency', 'Distance'], ascending = [True, True])
-    lenght = random.sample((range(1, int(Xdata.shape[0]/3))), 1)[0]
-    for i in range(0, lenght):
-        m = int(stm_and_ltm.iloc[i, 0] - 1)
-        n = int(stm_and_ltm.iloc[i, 1] - 1)
-        city_list = local_search_2_swap(Xdata, city_list, m, n)
-        stm_and_ltm.iloc[i, 3] = stm_and_ltm.iloc[i, 3] + 1
-        stm_and_ltm.iloc[i, 2] = 1
+stm_and_ltm = stm_and_ltm.sort_values(['Frequency', 'Distance'], ascending = [True, True])
+lenght = random.sample((range(1, int(Xdata.shape[0]/3))), 1)[0]
+for i in range(0, lenght):
+    m = int(stm_and_ltm.iloc[i, 0] - 1)
+    n = int(stm_and_ltm.iloc[i, 1] - 1)
+    city_list = local_search_2_swap(Xdata, city_list, m, n)
+    stm_and_ltm.iloc[i, 3] = stm_and_ltm.iloc[i, 3] + 1
+    stm_and_ltm.iloc[i, 2] = 1
     return stm_and_ltm, city_list
+
+np.transpose( ltm_diversification(Xdata, s_and_l, city_list))
 
 # Function: 4 opt Stochastic
 def local_search_4_opt_stochastic(Xdata, city_tour):
